@@ -1,0 +1,31 @@
+{
+  "manifest_version": 3,
+  "name": "AuraGuard - Escudo Ciudadano",
+  "version": "2.4.0",
+  "description": "Protección comunitaria en tiempo real contra sitios falsos, phishing y estafas digitales.",
+  "icons": {
+    "16": "assets/icon16.png",
+    "48": "assets/icon48.png",
+    "128": "assets/icon128.png"
+  },
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_title": "AuraGuard - Protección Activa",
+    "default_icon": {
+      "16": "assets/icon16.png",
+      "48": "assets/icon48.png",
+      "128": "assets/icon128.png"
+    }
+  },
+  "permissions": ["activeTab", "tabs", "contextMenus"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}

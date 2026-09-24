@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>AuraGuard - Chrome Extension</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <main class="popup-container">
+      <!-- TOP HEADER -->
+      <header class="popup-header">
+        <div class="header-top">
+          <!-- Logo & Brand -->
+          <div class="brand-group">
+            <div class="logo-box">
+              <img
+                src="../assets/gemini-svg.svg"
+                alt="AuraGuard Logo"
+                class="brand-logo-img"
+              />
+            </div>
+            <div>
+              <div class="brand-title-row">
+                <span class="brand-name">AuraGuard</span>
+                <span class="badge-version">v2.4</span>
+              </div>
+              <p class="brand-subtitle">Protección Web IA</p>
+            </div>
+          </div>
+
+          <!-- Status badge -->
+          <div class="status-badge" id="statusBadge">
+            <span class="status-dot" id="statusIndicatorDot"></span>
+            <span id="statusText">En línea</span>
+          </div>
+        </div>
+
+        <!-- Community metrics card -->
+        <div class="metrics-card">
+          <div class="metric-item">
+            <span class="metric-label">Amenazas Neutralizadas</span>
+            <span class="metric-value-emerald">
+              <span class="material-symbols-outlined icon-inline"
+                >shield_with_heart</span
+              >
+              1 activa
+            </span>
+          </div>
+          <div class="metric-item metric-border-left">
+            <span class="metric-label">Total Comunidad</span>
+            <span class="metric-value-navy">
+              <span class="material-symbols-outlined icon-inline text-teal"
+                >public</span
+              >
+              125.937
+            </span>
+          </div>
+        </div>
+      </header>
+
+      <!-- ACTIVE DOMAIN INFO BAR -->
+      <section class="domain-bar">
+        <div class="domain-info">
+          <span class="material-symbols-outlined icon-lock" id="sslIcon"
+            >lock</span
+          >
+          <span class="domain-name" id="currentDomain"
+            >gtidocs.virustotal.com</span
+          >
+        </div>
+        <span class="badge-ssl" id="sslBadge">SSL Activo</span>
+      </section>
+
+      <!-- INTERACTIVE CONTENT VIEWPORT -->
+      <div class="content-viewport custom-scrollbar">
+        <!-- ============================================== -->
+        <!-- STATE 1: IDLE (DEFAULT READY STATE) -->
+        <!-- ============================================== -->
+        <div class="state-view" id="stateIdle">
+          <!-- Shield with concentric glowing rings -->
+          <div class="shield-halo-wrapper">
+            <div class="halo-ring ring-outer"></div>
+            <div class="halo-ring ring-mid"></div>
+            <div class="shield-center-core">
+              <span class="material-symbols-outlined core-icon"
+                >verified_user</span
+              >
+            </div>
+          </div>
+
+          <!-- Status badge -->
+          <div class="ready-badge">
+            <span class="ready-dot"></span>
+            LISTO PARA ANALIZAR
+          </div>
+
+          <p class="idle-description">
+            AuraGuard analiza enlaces, certificados heurísticos y bases de
+            inteligencia comunitaria en tiempo real.
+          </p>
+
+          <!-- Primary CTA Button -->
+          <button class="btn-primary" id="btnStartScan">
+            <span class="material-symbols-outlined btn-icon">search_check</span>
+            <span>Analizar Página Actual</span>
+          </button>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- STATE 2: SCANNING (RADAR ANIMATION) -->
+        <!-- ============================================== -->
+        <div class="state-view hidden" id="stateScanning">
+          <!-- Radar Scanning Graphic -->
+          <div class="radar-wrapper">
+            <div class="radar-circle radar-c1"></div>
+            <div class="radar-circle radar-c2"></div>
+            <div class="radar-circle radar-c3"></div>
+
+            <!-- Rotating scanner beam -->
+            <div class="radar-sweep-beam">
+              <div class="radar-gradient-cone"></div>
+            </div>
+
+            <!-- Target dot blips -->
+            <div class="radar-blip blip-danger"></div>
+            <div class="radar-blip blip-safe"></div>
+
+            <!-- Center Core -->
+            <div class="radar-core">
+              <span class="material-symbols-outlined text-radar-icon"
+                >radar</span
+              >
+            </div>
+          </div>
+
+          <span class="scanning-badge"> Inspeccionando DOM y DNS... </span>
+
+          <p class="scanning-subtext">
+            Comparando firmas con 70+ bases de malware
+          </p>
+
+          <!-- Disabled Scanning Button with spinner -->
+          <button class="btn-scanning" disabled>
+            <svg class="spinner-svg" fill="none" viewBox="0 0 24 24">
+              <circle
+                class="spinner-track"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                stroke-width="4"
+              ></circle>
+              <path
+                class="spinner-head"
+                d="M4 12a8 8 0 018-8v8H4z"
+                fill="currentColor"
+              ></path>
+            </svg>
+            <span>Analizando contenido...</span>
+          </button>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- STATE 3: REPORT (94% EXTREME RISK GAUGE) -->
+        <!-- ============================================== -->
+        <div class="state-view hidden" id="stateReport">
+          <div class="report-content">
+            <!-- Gauge + Extreme Risk Badge -->
+            <div class="gauge-wrapper">
+              <svg class="gauge-svg" viewBox="0 0 100 100">
+                <circle class="gauge-track" cx="50" cy="50" r="40"></circle>
+                <circle class="gauge-bar" cx="50" cy="50" r="40"></circle>
+              </svg>
+              <div class="gauge-metric-center">
+                <span class="gauge-percent">94%</span>
+                <span class="gauge-label">RIESGO</span>
+              </div>
+            </div>
+
+            <!-- Severity pill -->
+            <div class="severity-pill">
+              <span class="severity-dot"></span>
+              Severidad Crítica
+            </div>
+
+            <!-- Threat alert warning box -->
+            <div class="threat-alert-box">
+              <div class="threat-title">
+                <span class="material-symbols-outlined text-threat-icon"
+                  >warning</span
+                >
+                ¡Peligro! Es una página falsa
+              </div>
+              <p class="threat-desc">
+                Detectados scripts de phishing destinados al robo de
+                credenciales corporativas y tokens OAuth.
+              </p>
+            </div>
+          </div>
+
+          <!-- Bottom Action Buttons -->
+          <div class="report-actions">
+            <!-- Report to Community Button -->
+            <button class="btn-report-threat" id="btnReportThreat">
+              <span class="material-symbols-outlined btn-icon">report</span>
+              <span id="reportBtnText">Reportar a la Comunidad</span>
+            </button>
+            <!-- Reset / Scan Again Button -->
+            <button class="btn-reset-scan" id="btnResetScan">
+              <span class="material-symbols-outlined btn-icon">replay</span>
+              <span>Volver a analizar</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- FOOTER -->
+      <footer class="popup-footer">
+        <div class="footer-db">
+          <span class="footer-dot"></span>
+          <span>Base de datos: <strong class="db-version">v94.1</strong></span>
+        </div>
+        <a class="footer-settings" href="#" id="btnSettings">
+          <span class="material-symbols-outlined icon-settings">settings</span>
+          <span>Ajustes</span>
+        </a>
+      </footer>
+    </main>
+
+    <script src="popup.js"></script>
+  </body>
+</html>

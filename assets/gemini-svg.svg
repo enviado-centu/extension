@@ -1,0 +1,27 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 120" width="100%" height="100%" fill="none">
+  <defs>
+    <!-- Gradiente del escudo exterior -->
+    <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10B981" />
+      <stop offset="100%" stop-color="#06D6A0" />
+    </linearGradient>
+    <!-- Tono de profundidad del escudo interior -->
+    <linearGradient id="innerGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0F766E" />
+      <stop offset="100%" stop-color="#0D9488" />
+    </linearGradient>
+  </defs>
+
+  <!-- Cuerpo del escudo exterior -->
+  <path d="M50 5 L90 22 C90 65 50 110 50 110 C50 110 10 65 10 22 Z" fill="url(#shieldGrad)" />
+
+  <!-- Anillo medio de profundidad -->
+  <circle cx="50" cy="52" r="28" fill="url(#innerGrad)" />
+
+  <!-- Anillo blanco de la pupila -->
+  <circle cx="50" cy="52" r="19" fill="#FFFFFF" />
+
+  <!-- Pupila central oscura -->
+  <circle cx="50" cy="52" r="10" fill="#0B132B" />
+</svg>
+
