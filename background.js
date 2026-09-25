@@ -9,7 +9,7 @@ import { guardarCache, leerCache } from "./lib/cache.js";
 import { nivelVisual } from "./lib/estado.js";
 import { listaVencida, marcaOficial, marcaPorNombre, resultadoOficialLocal } from "./lib/lista-blanca.js";
 import { enPausa, pausaHasta } from "./lib/pausa.js";
-import { claveCache, debeAnalizar } from "./lib/url.js";
+import { claveCache, debeAnalizar, hostDe } from "./lib/url.js";
 
 const TIMEOUT_MS = 5000;
 const DEBOUNCE_SPA_MS = 1000;
@@ -202,9 +202,25 @@ async function mostrarEnIcono(tabId, estado) {
   }
 }
 
+/** Marca que el sitio parece imitar ({id, nombre, dominio} de la lista blanca) o null. */
+async function marcaImitadaDe(estado) {
+  const brand = estado?.resultado?.summary?.brand;
+  return brand ? marcaPorNombre(brand, await leer(local, "listaBlanca")) : null;
+}
+
+/** Lo que necesita el cartel: estado, marca imitada y si el usuario ya eligió continuar. */
+async function datosParaContenido(estado) {
+  const continuar = (await leer(sesion, "continuar")) ?? {};
+  return {
+    estado,
+    marcaImitada: await marcaImitadaDe(estado),
+    continuarDominio: Object.hasOwn(continuar, hostDe(estado.url)),
+  };
+}
+
 async function avisarAlContenido(tabId, estado) {
   try {
-    await chrome.tabs.sendMessage(tabId, { tipo: "resultado", estado }, { frameId: 0 });
+    await chrome.tabs.sendMessage(tabId, { tipo: "resultado", ...(await datosParaContenido(estado)) }, { frameId: 0 });
   } catch {
     // Todavía no hay content script (o la página no lo admite): lo pide él al cargar
   }
@@ -250,7 +266,37 @@ const MENSAJES_DE_PAGINA = {
   async "obtener-resultado"(_mensaje, sender) {
     const estado = await leer(sesion, claveTab(sender.tab.id));
     if (!estado || claveCache(estado.url) !== claveCache(sender.url)) return null;
-    return { estado };
+    return datosParaContenido(estado);
+  },
+
+  // "Salir de esta página": el content script no puede navegar ni cerrar pestañas
+  async salir(_mensaje, sender) {
+    const tabId = sender.tab.id;
+    // El dominio oficial sale de la lista blanca, nunca de lo que mande la página
+    const marca = await marcaImitadaDe(await leer(sesion, claveTab(tabId)));
+    if (marca) {
+      await chrome.tabs.update(tabId, { url: `https://${marca.dominio}` });
+      return { ok: true };
+    }
+    try {
+      await chrome.tabs.goBack(tabId);
+    } catch {
+      // Sin historial: primero la pestaña nueva, así no se cierra la ventana si era la única
+      await chrome.tabs.create({ windowId: sender.tab.windowId });
+      await chrome.tabs.remove(tabId);
+    }
+    return { ok: true };
+  },
+
+  // "Entiendo el riesgo, continuar": no se vuelve a mostrar en esta sesión para ese sitio
+  async continuar(_mensaje, sender) {
+    const host = hostDe(sender.url);
+    if (!host) return { ok: false };
+    await enFila(async () => {
+      const continuar = (await leer(sesion, "continuar")) ?? {};
+      await sesion.set({ continuar: { ...continuar, [host]: true } });
+    });
+    return { ok: true };
   },
 };
 
@@ -258,9 +304,7 @@ const MENSAJES_DE_PAGINA = {
 const MENSAJES_DEL_PANEL = {
   async "obtener-estado"({ tabId }) {
     const estado = await leer(sesion, claveTab(tabId));
-    const brand = estado?.resultado?.summary?.brand;
-    const marcaImitada = brand ? marcaPorNombre(brand, await leer(local, "listaBlanca")) : null;
-    return { estado: estado ?? null, marcaImitada };
+    return { estado: estado ?? null, marcaImitada: await marcaImitadaDe(estado) };
   },
 
   async reanalizar({ tabId, saltearCache = true }) {
