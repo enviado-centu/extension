@@ -1,0 +1,14 @@
+# Paquetes que genera el navegador al empaquetar la extensión
+*.crx
+*.pem
+*.zip
+
+# Sistema operativo y editores
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+
+# Node (no usamos dependencias, pero por las dudas)
+node_modules/
