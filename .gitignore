@@ -10,5 +10,8 @@ desktop.ini
 .vscode/
 .idea/
 
+# Capturas y perfil temporal de la prueba en navegador (tests/e2e/navegador.mjs)
+tests/e2e/salida/
+
 # Node (no usamos dependencias, pero por las dudas)
 node_modules/
