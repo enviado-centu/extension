@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <title>Detector de engaños digitales</title>
+    <link rel="stylesheet" href="popup.css" />
+    <script type="module" src="popup.js"></script>
+  </head>
+  <body>
+    <header>
+      <img src="../icons/icon-32.png" alt="" width="20" height="20" />
+      <h1>Detector de engaños digitales</h1>
+    </header>
+
+    <main id="contenido" aria-live="polite">
+      <p class="mensaje" id="mensaje">Analizando…</p>
+
+      <section id="resultado" hidden>
+        <div class="nivel" id="nivel">
+          <span class="punto" aria-hidden="true"></span>
+          <span id="nivel-texto"></span>
+        </div>
+        <p class="puntaje" id="puntaje"></p>
+        <p class="dominio" id="dominio"></p>
+        <p class="marca" id="marca" hidden></p>
+
+        <h2 id="motivos-titulo">Por qué</h2>
+        <ul id="motivos" aria-labelledby="motivos-titulo"></ul>
+
+        <p class="consejo" id="consejo"></p>
+      </section>
+
+      <button type="button" id="reanalizar" hidden>Volver a analizar</button>
+    </main>
+
+    <footer>Solo se analiza la dirección de la página. No leemos lo que escribís.</footer>
+  </body>
+</html>

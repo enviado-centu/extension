@@ -1,0 +1,142 @@
+:root {
+  --fondo: #ffffff;
+  --texto: #1f2328;
+  --suave: #59636e;
+  --borde: #d1d9e0;
+  --boton: #2563eb;
+  --boton-texto: #ffffff;
+  --nivel: #6e7781;
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --fondo: #1f2328;
+    --texto: #f0f3f6;
+    --suave: #b7bdc8;
+    --borde: #3d444d;
+    --boton: #4c8dff;
+    --boton-texto: #0d1117;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  width: 340px;
+  margin: 0;
+  padding: 14px 16px;
+  font: 14px/1.45 system-ui, "Segoe UI", Roboto, sans-serif;
+  color: var(--texto);
+  background: var(--fondo);
+}
+
+header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+h1 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+h2 {
+  margin: 12px 0 4px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--suave);
+}
+
+p {
+  margin: 4px 0;
+}
+
+.mensaje {
+  margin: 8px 0 12px;
+  font-size: 15px;
+}
+
+.nivel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-left: 5px solid var(--nivel);
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--nivel) 12%, transparent);
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.punto {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--nivel);
+  flex: none;
+}
+
+.puntaje,
+.dominio {
+  color: var(--suave);
+}
+
+.dominio {
+  overflow-wrap: anywhere;
+}
+
+.marca {
+  font-weight: 600;
+}
+
+ul {
+  margin: 0;
+  padding-left: 18px;
+}
+
+li {
+  margin: 2px 0;
+}
+
+.consejo {
+  margin-top: 12px;
+  padding: 8px 10px;
+  border: 1px solid var(--borde);
+  border-radius: 6px;
+}
+
+button {
+  margin-top: 12px;
+  padding: 7px 12px;
+  border: 0;
+  border-radius: 6px;
+  font: inherit;
+  font-weight: 600;
+  color: var(--boton-texto);
+  background: var(--boton);
+  cursor: pointer;
+}
+
+button:focus-visible {
+  outline: 3px solid var(--texto);
+  outline-offset: 2px;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+footer {
+  margin-top: 14px;
+  padding-top: 8px;
+  border-top: 1px solid var(--borde);
+  font-size: 12px;
+  color: var(--suave);
+}
